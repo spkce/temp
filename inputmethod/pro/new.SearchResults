@@ -1,0 +1,45 @@
+---- setGeometry Æ¥Åä (7 in 2 ÎÄ¼þ) ----
+Im.cpp:165
+        kb->setGeometry(0, 180, 240, 140);
+		//kb->setGeometry(20, 100, 240, 140);
+        kb->chnPanel->setVisible(false);
+        kb->keyBoard->setGeometry(0, 0, 240, 140);
+        for (i = 0; i < 26; i++)
+            kb->key[i]->setText(number[i]);
+Im.cpp:175
+            kb->setGeometry(0, 180, 240, 140);
+           // kb->setGeometry(20, 100, 240, 140);
+            kb->chnPanel->setVisible(false);
+	    kb->keyBoard->setGeometry(0,0,240,140);
+
+            kb->keyShift->setText(tr("SFT"));
+Im.cpp:183
+            kb->setGeometry(0, 120, 240, 200);
+            //kb->setGeometry(20, 100, 240, 200);
+            kb->chnPanel->setVisible(true);
+            kb->keyBoard->setGeometry(0, 60, 240, 140);
+
+            kb->keyShift->setText(tr("CLR"));
+Im.cpp:209
+        kb->setGeometry(20, 40, 240, 200);
+        kb->chnPanel->setVisible(true);
+        kb->keyBoard->setGeometry(20, 40, 240, 140);
+
+        kb->keyShift->setText(tr("CLR"));
+Im.cpp:217
+        kb->setGeometry(0, 180, 240, 140);
+        kb->chnPanel->setVisible(false);
+        kb->keyBoard->setGeometry(0, 0, 240, 140);
+
+        kb->keyShift->setText(tr("SFT"));
+Keyboard.cpp:8
+    chnPanel->setGeometry(0, 0, 240, 60);
+
+    int i;
+Keyboard.cpp:72
+    keyBoard->setGeometry(0,0,240,140);
+
+    setCursor(QCursor(Qt::BlankCursor));
+    setGeometry(40, 100, 240, 140);
+    setObjectName(QString::fromUtf8("KEYBOARD"));
+}
