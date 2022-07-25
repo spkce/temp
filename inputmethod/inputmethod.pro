@@ -3,7 +3,7 @@
 ######################################################################
 
 TEMPLATE = app
-TARGET = 
+TARGET = inputmethod
 DEPENDPATH += .
 INCLUDEPATH += .
 
@@ -12,3 +12,4 @@ HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h
 SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp
 RESOURCES += inputmethod.qrc
 QT += sql
+QT += core gui widgets
