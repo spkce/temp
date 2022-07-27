@@ -85,7 +85,7 @@ void Keyboard::mousePressEvent(QMouseEvent *ev)
     isMoving = true;
     lastPnt = ev->pos() + pos();
 }
-/********´Ë´¦²Î¿¼¾ê½ã¸øµÄT9ÊäÈë·¨¡£ÊµÏÖÒÆ¶¯***********************/
+/********æ­¤å¤„å‚è€ƒå¨Ÿå§ç»™çš„T9è¾“å…¥æ³•ã€‚å®ç°ç§»åŠ¨***********************/
 void Keyboard::mouseReleaseEvent(QMouseEvent *ev)
 {
   

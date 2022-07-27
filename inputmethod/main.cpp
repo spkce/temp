@@ -5,13 +5,13 @@
 
 int main(int argc, char *argv[])
 {
-    QTextCodec *codec = QTextCodec::codecForName("GB2312");//ÕâÖÖGB2312ºÜ·½±ãµÄÊµÏÖÖĞÎÄ¶ÌĞÅ·¢ËÍ
+    QTextCodec *codec = QTextCodec::codecForName("GB2312");//è¿™ç§GB2312å¾ˆæ–¹ä¾¿çš„å®ç°ä¸­æ–‡çŸ­ä¿¡å‘é€
     QTextCodec::setCodecForLocale(codec);
     QTextCodec::setCodecForCStrings(codec);
     QTextCodec::setCodecForTr(codec);
     QApplication a(argc, argv);
     
-    QFile file(":/qss/inputmethod.qss");//qssÎÄ¼şÊµÏÖÆ¯ÁÁµÄÆ¤·ô
+    QFile file(":/qss/inputmethod.qss");//qssæ–‡ä»¶å®ç°æ¼‚äº®çš„çš®è‚¤
     file.open(QFile::ReadOnly);    
     QString styleSheet=QLatin1String(file.readAll());
     a.setStyleSheet(styleSheet);

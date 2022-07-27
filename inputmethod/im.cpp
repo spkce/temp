@@ -18,7 +18,7 @@ IMFrame::IMFrame()
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("./data.db");
     if (!db.open())
-        QMessageBox::information(0, tr("ÖĞÎÄ×Ö¿âdate.dbÎŞ·¨´ò¿ª"), tr("Çë²é¿´ÏàÓ¦ÎÄ¼şµÄÂ·¾­"));
+        QMessageBox::information(0, tr("ä¸­æ–‡å­—åº“date.dbæ— æ³•æ‰“å¼€"), tr("è¯·æŸ¥çœ‹ç›¸åº”æ–‡ä»¶çš„è·¯ç»"));
 
     model = new QSqlTableModel();
     model->setTable("pingyin");
@@ -277,7 +277,7 @@ void IMFrame::listChn()
         mapper->setMapping(kb->chnPanel->chnLabel[i], kb->chnPanel->chnLabel[i]->text());
     }
 }
-/*********ÊµÏÖÒş²ØºÍÏÔÊ¾¼üÅÌ£¬ÕâÊÇºÍÆäËû³ÌĞòµÄÒ»¸ö½Ó¿Ú**********/
+/*********å®ç°éšè—å’Œæ˜¾ç¤ºé”®ç›˜ï¼Œè¿™æ˜¯å’Œå…¶ä»–ç¨‹åºçš„ä¸€ä¸ªæ¥å£**********/
 void IMFrame::handleMessageFromQCop(const QString &message, const QByteArray &data)
 {
     if (message == "show") {

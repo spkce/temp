@@ -11,7 +11,7 @@ public:
     ChnPanel();
     ~ChnPanel();
     QLineEdit *chnLineEdit;
-    ClickLabel *chnLabel[5];//×î¶àºòÑ¡ÖÐÎÄ×ÖµÄ¸öÊý
+    ClickLabel *chnLabel[5];//æœ€å¤šå€™é€‰ä¸­æ–‡å­—çš„ä¸ªæ•°
     QToolButton *btnLeft;
     QToolButton *btnRight;
 };
