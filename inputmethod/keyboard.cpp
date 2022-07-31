@@ -74,6 +74,30 @@ Keyboard::Keyboard():QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowSt
     setCursor(QCursor(Qt::BlankCursor));
     setGeometry(40, 100, 240, 140);
     setObjectName(QString::fromUtf8("KEYBOARD"));
+
+	for (i = 0; i < 26; i++)
+	{
+		connect(key[i], SIGNAL(clicked()), mapper, SLOT(map()));
+	}
+
+    //connect(keyShift, SIGNAL(clicked()), mapper, SLOT(map()));
+    //connect(keyChaNum, SIGNAL(clicked()), this, SLOT(setChaNum()));
+    //connect(keyEngChn, SIGNAL(clicked()), this, SLOT(setEngChn()));
+    //connect(keyComma, SIGNAL(clicked()), mapper, SLOT(map()));
+    //connect(keyPeriod, SIGNAL(clicked()), mapper, SLOT(map()));
+    //connect(keyDelete, SIGNAL(clicked()), mapper, SLOT(map()));
+    //connect(keySpace, SIGNAL(clicked()), mapper, SLOT(map()));
+    //connect(keyGo, SIGNAL(clicked()), mapper, SLOT(map()));
+//
+    //connect(chnPanel->chnLineEdit, SIGNAL(textChanged(QString)), this, SLOT(transPy(QString)));
+    //connect(chnPanel->btnLeft, SIGNAL(clicked()), this, SLOT(turnLeft()));
+    //connect(chnPanel->btnRight, SIGNAL(clicked()), this, SLOT(turnRight()));
+//
+    //for (i = 0; i < 5; i++)
+	//{
+	//	connect(chnPanel->chnLabel[i], SIGNAL(clicked()), mapper, SLOT(map()));
+	//}
+        
 }
 
 Keyboard::~Keyboard()

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QMouseEvent>
 #include <QPoint>
+#include <QSignalMapper>
 
 const static QString english[26]={"Q","W","E","R","T","Y","U","I","O","P",
                                   "A","S","D","F","G","H","J","K","L",
@@ -21,6 +22,7 @@ public:
     ~Keyboard();
     ChnPanel *chnPanel;
     QWidget *keyBoard;
+	QSignalMapper *mapper;
     Key *key[26];
     Key *keyShift;
     Key *keyDelete;
