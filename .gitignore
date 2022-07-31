@@ -1,0 +1,4 @@
+*.o
+inputmethod/moc_*.cpp
+inputmethod/moc_*.h
+inputmethod/inputmethod

@@ -1,3 +1,4 @@
+#if 0
 #include "im.h"
 #include <QMessageBox>
 #include <QCopChannel>
@@ -287,5 +288,6 @@ void IMFrame::handleMessageFromQCop(const QString &message, const QByteArray &da
         kb->setVisible(false);
     }
 }
+#endif
 
 

@@ -1,4 +1,5 @@
 
+#if 0
 #include "keyboard.h"
 #include <QWSInputMethod>
 #include <QSignalMapper>
@@ -49,3 +50,4 @@ private slots:
 
         void handleMessageFromQCop(const QString & message, const QByteArray & data);		
 };
+#endif
