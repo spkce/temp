@@ -1,7 +1,8 @@
 #include "keyboard.h"
 #include <QHBoxLayout>
 
-Keyboard::Keyboard():QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
+Keyboard::Keyboard()
+:QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
 {
     chnPanel = new ChnPanel();
     chnPanel->setParent(this);
@@ -71,14 +72,12 @@ Keyboard::Keyboard():QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowSt
     keyBoard->setLayout(layoutKeyboard);
     keyBoard->setGeometry(0,0,240,140);
 
-    setCursor(QCursor(Qt::BlankCursor));
     setGeometry(40, 100, 240, 140);
     setObjectName(QString::fromUtf8("KEYBOARD"));
-
-	for (i = 0; i < 26; i++)
-	{
-		connect(key[i], SIGNAL(clicked()), mapper, SLOT(map()));
-	}
+	//for (i = 0; i < 26; i++)
+	//{
+	//	connect(key[i], SIGNAL(clicked()), key[i], SLOT(onclick()));
+	//}
 
     //connect(keyShift, SIGNAL(clicked()), mapper, SLOT(map()));
     //connect(keyChaNum, SIGNAL(clicked()), this, SLOT(setChaNum()));

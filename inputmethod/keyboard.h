@@ -14,7 +14,7 @@ const static QString number[26]={"0","1","2","3","4","5","6","7","8","9",
                                  "#","$","%","&&","=","+","-","*","/",
                                  "?","!",":",";","\"","(",")"};
 
-class Keyboard:public QWidget
+class Keyboard : public QWidget
 {
     Q_OBJECT
 public:
@@ -22,7 +22,6 @@ public:
     ~Keyboard();
     ChnPanel *chnPanel;
     QWidget *keyBoard;
-	QSignalMapper *mapper;
     Key *key[26];
     Key *keyShift;
     Key *keyDelete;

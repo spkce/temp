@@ -8,8 +8,9 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h
-SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp
+HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h infra/LogInternal.h infra/ctime.h infra/MsgQueue.h infra/thread.h infra/link.h infra/cfunc.h infra/def.h
+SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp infra/MsgQueue.cpp infra/ctime.cpp infra/thread.cpp infra/link.cpp
 RESOURCES += inputmethod.qrc
+LIBS += -L. -lrt -ldl -lm
 QT += sql
 QT += core gui widgets
