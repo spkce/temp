@@ -59,7 +59,7 @@ bool CKBTermial::init()
 
 bool CKBTermial::notify(const char* buf, int len)
 {
-	if (m_session != nullptr)
+	if (m_session == nullptr)
 	{
 		return false;
 	}

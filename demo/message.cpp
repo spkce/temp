@@ -36,6 +36,19 @@ bool CKeyboard::init()
 		return false;
 	}
 
+	struct timeval _timeout = {3,0};
+	if (setsockopt(m_sockfd, SOL_SOCKET, SO_RCVTIMEO,(char*)&_timeout,sizeof(struct timeval)) == -1)
+	{
+		Infra::Error("NetTerminal","setsockopt error : %s\n", strerror(errno));
+		return false;
+	}
+	
+	if (setsockopt(m_sockfd, SOL_SOCKET, SO_SNDTIMEO,(char*)&_timeout,sizeof(struct timeval)) == -1)
+	{
+		Infra::Error("NetTerminal","setsockopt error : %s\n", strerror(errno));
+		return false;
+	}
+
 	struct sockaddr_in addr = {0};
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(7800);
@@ -51,17 +64,55 @@ bool CKeyboard::init()
 	return true;
 }
 
+bool CKeyboard::send(const char* buf, int len)
+{
+	if (m_sockfd < 0)
+	{
+		return m_sockfd;
+	}
+
+	if (buf == NULL || len <= 0)
+	{
+		return -1;
+	}
+
+	char* p = (char*)buf;
+	while (len > 0)
+	{
+		int sendlen = ::send(m_sockfd, p, len, 0);
+		if (sendlen > 0 )
+		{
+			len -= sendlen;
+			p += sendlen;
+		}
+		else if (errno == EINTR)
+		{
+			continue;
+		}
+		else
+		{
+			Infra::Error("NetTerminal","send err : %s\n", strerror(errno));
+
+			return -1;
+		}
+	}
+
+	return len;
+}
 
 void CKeyboard::replyProc(void* arg)
 {
+	Infra::Error("NetTerminal","replyProc\n");
+
 	memset(m_pRecvbuf, 0, m_RecvLen);
 	int len = recv(m_sockfd, m_pRecvbuf, m_RecvLen, 0);
 
 	if (len <= 0)
 	{
+		Infra::CTime::delay_ms(500);
 		return;
 	}
 
 	std::string str = m_pRecvbuf;
-	printf("recv:%s", str.c_str());
+	printf("recv:%s\n", str.c_str());
 }

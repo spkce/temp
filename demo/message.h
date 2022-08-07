@@ -13,6 +13,7 @@ private:
 public:
 	static CKeyboard* instance();
 	bool init();
+	bool send(const char* buf, int len);
 
 private:
 	void replyProc(void* arg);

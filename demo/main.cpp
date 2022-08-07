@@ -1,4 +1,5 @@
 #include "stdio.h"
+#include "ctime.h"
 #include "message.h"
 #include <string>
 
@@ -12,8 +13,10 @@ void func(std::string str)
 
 int main(int argc, char const *argv[])
 {
-
-	while (1);
+	CKeyboard::instance()->init();
+	while (1)
+	{
+	}
 
 	
 	return 0;

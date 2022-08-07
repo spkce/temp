@@ -1,5 +1,6 @@
 #include "keyboard.h"
 #include <QHBoxLayout>
+#include "message.h"
 
 Keyboard::Keyboard()
 :QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
@@ -97,6 +98,7 @@ Keyboard::Keyboard()
 	//	connect(chnPanel->chnLabel[i], SIGNAL(clicked()), mapper, SLOT(map()));
 	//}
         
+	CKBMessage::instance()->init();
 }
 
 Keyboard::~Keyboard()
