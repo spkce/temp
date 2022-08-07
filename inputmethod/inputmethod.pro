@@ -8,8 +8,18 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h infra/LogInternal.h infra/ctime.h infra/MsgQueue.h infra/thread.h infra/link.h infra/cfunc.h infra/def.h
-SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp infra/MsgQueue.cpp infra/ctime.cpp infra/thread.cpp infra/link.cpp
+HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h message.h
+SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp message.cpp
+
+INCLUDEPATH += Infra
+INCLUDEPATH += netFwk
+
+HEADERS += Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h
+SOURCES += Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp
+
+HEADERS += netFwk/NetServer.h netFwk/Session.h 
+SOURCES += netFwk/NetServer.cpp netFwk/Session.cpp
+
 RESOURCES += inputmethod.qrc
 LIBS += -L. -lrt -ldl -lm
 QT += sql

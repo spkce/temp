@@ -17,9 +17,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+INCLUDEPATH += Infra
+INCLUDEPATH += netFwk
+
 # Input
 HEADERS += message.h
 SOURCES += main.cpp message.cpp
-HEADERS += infra/LogInternal.h infra/ctime.h infra/MsgQueue.h infra/thread.h infra/link.h infra/cfunc.h infra/def.h
-SOURCES += infra/MsgQueue.cpp infra/ctime.cpp infra/thread.cpp infra/link.cpp
+
+HEADERS += Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h
+SOURCES += Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp
+
 LIBS += -L. -lrt -ldl -lm

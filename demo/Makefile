@@ -15,7 +15,7 @@ CXX           = /opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-li
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -O2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtCore -I. -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++
+INCPATH       = -I. -I. -IInfra -InetFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtCore -I. -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++
 QMAKE         = /opt/qt5.9.5-a7/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -53,16 +53,20 @@ OBJECTS_DIR   = ./
 
 SOURCES       = main.cpp \
 		message.cpp \
-		infra/MsgQueue.cpp \
-		infra/ctime.cpp \
-		infra/thread.cpp \
-		infra/link.cpp 
+		Infra/LogInternal.cpp \
+		Infra/ctime.cpp \
+		Infra/thread.cpp \
+		Infra/link.cpp \
+		Infra/timer.cpp \
+		Infra/Log.cpp 
 OBJECTS       = main.o \
 		message.o \
-		MsgQueue.o \
+		LogInternal.o \
 		ctime.o \
 		thread.o \
-		link.o
+		link.o \
+		timer.o \
+		Log.o
 DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
 		/opt/qt5.9.5-a7/mkspecs/common/unix.conf \
 		/opt/qt5.9.5-a7/mkspecs/common/linux.conf \
@@ -189,18 +193,20 @@ DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
 		/opt/qt5.9.5-a7/mkspecs/features/yacc.prf \
 		/opt/qt5.9.5-a7/mkspecs/features/lex.prf \
 		demo.pro message.h \
-		infra/LogInternal.h \
-		infra/ctime.h \
-		infra/MsgQueue.h \
-		infra/thread.h \
-		infra/link.h \
-		infra/cfunc.h \
-		infra/def.h main.cpp \
+		Infra/LogInternal.h \
+		Infra/ctime.h \
+		Infra/thread.h \
+		Infra/link.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/timer.h main.cpp \
 		message.cpp \
-		infra/MsgQueue.cpp \
-		infra/ctime.cpp \
-		infra/thread.cpp \
-		infra/link.cpp
+		Infra/LogInternal.cpp \
+		Infra/ctime.cpp \
+		Infra/thread.cpp \
+		Infra/link.cpp \
+		Infra/timer.cpp \
+		Infra/Log.cpp
 QMAKE_TARGET  = demo
 DESTDIR       = 
 TARGET        = demo
@@ -484,8 +490,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5.9.5-a7/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents message.h infra/LogInternal.h infra/ctime.h infra/MsgQueue.h infra/thread.h infra/link.h infra/cfunc.h infra/def.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp message.cpp infra/MsgQueue.cpp infra/ctime.cpp infra/thread.cpp infra/link.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents message.h Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp message.cpp Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -532,32 +538,53 @@ compiler_clean: compiler_moc_predefs_clean
 ####### Compile
 
 main.o: main.cpp message.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
-		infra/MsgQueue.h
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-message.o: message.cpp infra/ctime.h
+message.o: message.cpp Infra/Log.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/ctime.h \
+		message.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o message.o message.cpp
 
-MsgQueue.o: infra/MsgQueue.cpp infra/MsgQueue.h \
-		infra/ctime.h \
-		infra/LogInternal.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MsgQueue.o infra/MsgQueue.cpp
+LogInternal.o: Infra/LogInternal.cpp Infra/Log.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o LogInternal.o Infra/LogInternal.cpp
 
-ctime.o: infra/ctime.cpp infra/ctime.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctime.o infra/ctime.cpp
+ctime.o: Infra/ctime.cpp Infra/ctime.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctime.o Infra/ctime.cpp
 
-thread.o: infra/thread.cpp infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
-		infra/link.h \
-		infra/LogInternal.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o infra/thread.cpp
+thread.o: Infra/thread.cpp Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/link.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o Infra/thread.cpp
 
-link.o: infra/link.cpp infra/link.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o link.o infra/link.cpp
+link.o: Infra/link.cpp Infra/link.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o link.o Infra/link.cpp
+
+timer.o: Infra/timer.cpp Infra/link.h \
+		Infra/ctime.h \
+		Infra/timer.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/thread.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o timer.o Infra/timer.cpp
+
+Log.o: Infra/Log.cpp Infra/Log.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Log.o Infra/Log.cpp
 
 ####### Install
 

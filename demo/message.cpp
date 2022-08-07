@@ -1,81 +1,67 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <algorithm>
 #include <string.h>
-#include "infra/ctime.h"
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include "thread.h"
+#include "ctime.h"
+#include "Log.h"
 #include "message.h"
 
-CMessage::CMessage(const char* s, const char* r)
-:m_qs(s, 20, sizeof(struct keyMsgPacket))
-,m_qr(r, 20, sizeof(struct keyMsgPacket))
+
+CKeyboard::CKeyboard()
+:m_RecvLen(1024)
 {
-	m_recvThread.attachProc(Infra::ThreadProc_t(&CMessage::proc, this));
-	m_recvThread.createTread();
+	m_recvThread.attachProc(Infra::ThreadProc_t(&CKeyboard::replyProc, this));
+	m_pRecvbuf = new char[m_RecvLen];
+}
+CKeyboard::~CKeyboard()
+{
+	m_recvThread.detachProc(Infra::ThreadProc_t(&CKeyboard::replyProc, this));
+	delete m_pRecvbuf;
 }
 
-CMessage::~CMessage()
+CKeyboard* CKeyboard::instance()
 {
-	m_recvThread.stop(true);
-	m_recvThread.detachProc(Infra::ThreadProc_t(&CMessage::proc, this));
-	m_mapProc.clear();
-}
-
- CMessage* CMessage::instance()
-{
-	static CMessage inst("keymsgr", "keymsgs");
+	static CKeyboard inst;
 	return &inst;
 }
-
-bool CMessage::sendMsg(const std::string & str)
+bool CKeyboard::init()
 {
-	struct keyMsgPacket packet = {0};
-	const size_t len = str.length();
-	packet.len = len < MAX_LEN - 1 ? len : MAX_LEN - 1;
-	memcpy(packet.buf, str.c_str(), packet.len);
-
-	return m_qs.input((const char*)&packet, sizeof(struct keyMsgPacket), 1);
-}
-
-bool CMessage::bind(std::string msg, const EventProc_t & fun)
-{
-	if (m_mapProc.find(msg) != m_mapProc.end())
+	m_sockfd = socket(AF_INET,SOCK_STREAM,0);
+	if(m_sockfd < 0)
 	{
 		return false;
 	}
 
-	m_mapProc[msg] = fun;
+	struct sockaddr_in addr = {0};
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(7800);
+	addr.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+	if(connect(m_sockfd, (struct sockaddr*)&addr, sizeof(addr)) < 0)
+	{
+		return false;
+	}
+
+	m_recvThread.createTread();
+	m_recvThread.run();
 	return true;
 }
 
-void CMessage::proc(void* arg)
-{
-	std::string str;
-	if (recvMsg(str))
-	{
-		auto it = m_mapProc.find(str);
-		if (it != m_mapProc.end())
-		{
-			EventProc_t func = it->second;
-			func(str);
-			return ;
-		}
 
-		it = m_mapProc.find("all");
-		if (it != m_mapProc.end())
-		{
-			EventProc_t func = it->second;
-			func(str);
-		}
-		return ;
-	}
-	//若无事件处理，延时100ms
-	Infra::CTime::delay_ms(100);
-}
-
-bool CMessage::recvMsg(std::string & str)
+void CKeyboard::replyProc(void* arg)
 {
-	struct keyMsgPacket packet = {0};
-	if (m_qr.output((char *)&packet, sizeof(struct keyMsgPacket), 100) > 0)
+	memset(m_pRecvbuf, 0, m_RecvLen);
+	int len = recv(m_sockfd, m_pRecvbuf, m_RecvLen, 0);
+
+	if (len <= 0)
 	{
-		str = packet.buf;
-		return true;
+		return;
 	}
-	return false;
+
+	std::string str = m_pRecvbuf;
+	printf("recv:%s", str.c_str());
 }

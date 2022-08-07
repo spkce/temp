@@ -1,36 +1,26 @@
 #ifndef __MESSAGE_H__
 #define __MESSAGE_H__
-#include <map>
-#include <string>
-#include "infra/thread.h"
-#include "infra/MsgQueue.h"
 
-class CMessage
+#include <string>
+#include "thread.h"
+#include <sys/socket.h>
+
+class CKeyboard
 {
-	#define MAX_LEN 20
+private:
+	CKeyboard();
+	~CKeyboard();
 public:
-	struct keyMsgPacket
-	{
-		char buf[MAX_LEN];
-		size_t len;
-	};
-	typedef Infra::CFunc<void, std::string> EventProc_t;
-public:
-	static CMessage* instance();
-	bool sendMsg(const std::string & str);
-	bool bind(std::string msg, const EventProc_t & fun);
+	static CKeyboard* instance();
+	bool init();
 
 private:
-	CMessage(const char* s, const char* r);
-	virtual ~CMessage();
-	void proc(void* arg);
-	bool recvMsg(std::string & str);
+	void replyProc(void* arg);
 
-private: 
-	Infra::CMsgQueue m_qs;
-	Infra::CMsgQueue m_qr;
+private:
+	const int m_RecvLen;
+	int m_sockfd;
 	Infra::CThread m_recvThread;
-	std::map<std::string, EventProc_t> m_mapProc;
+	char* m_pRecvbuf;
 };
-
 #endif

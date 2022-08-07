@@ -15,7 +15,7 @@ CXX           = /opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-li
 DEFINES       = -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -O2 -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -O2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I. -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I. -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++
+INCPATH       = -I. -I. -IInfra -InetFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I. -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++
 QMAKE         = /opt/qt5.9.5-a7/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -57,10 +57,15 @@ SOURCES       = chnpanel.cpp \
 		key.cpp \
 		keyboard.cpp \
 		main.cpp \
-		infra/MsgQueue.cpp \
-		infra/ctime.cpp \
-		infra/thread.cpp \
-		infra/link.cpp qrc_inputmethod.cpp \
+		message.cpp \
+		Infra/LogInternal.cpp \
+		Infra/ctime.cpp \
+		Infra/thread.cpp \
+		Infra/link.cpp \
+		Infra/timer.cpp \
+		Infra/Log.cpp \
+		netFwk/NetServer.cpp \
+		netFwk/Session.cpp qrc_inputmethod.cpp \
 		moc_chnpanel.cpp \
 		moc_clicklabel.cpp \
 		moc_im.cpp \
@@ -72,10 +77,15 @@ OBJECTS       = chnpanel.o \
 		key.o \
 		keyboard.o \
 		main.o \
-		MsgQueue.o \
+		message.o \
+		LogInternal.o \
 		ctime.o \
 		thread.o \
 		link.o \
+		timer.o \
+		Log.o \
+		NetServer.o \
+		Session.o \
 		qrc_inputmethod.o \
 		moc_chnpanel.o \
 		moc_clicklabel.o \
@@ -213,22 +223,30 @@ DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
 		im.h \
 		key.h \
 		keyboard.h \
-		infra/LogInternal.h \
-		infra/ctime.h \
-		infra/MsgQueue.h \
-		infra/thread.h \
-		infra/link.h \
-		infra/cfunc.h \
-		infra/def.h chnpanel.cpp \
+		message.h \
+		Infra/LogInternal.h \
+		Infra/ctime.h \
+		Infra/thread.h \
+		Infra/link.h \
+		Infra/cfunc.h \
+		Infra/def.h \
+		Infra/timer.h \
+		netFwk/NetServer.h \
+		netFwk/Session.h chnpanel.cpp \
 		clicklabel.cpp \
 		im.cpp \
 		key.cpp \
 		keyboard.cpp \
 		main.cpp \
-		infra/MsgQueue.cpp \
-		infra/ctime.cpp \
-		infra/thread.cpp \
-		infra/link.cpp
+		message.cpp \
+		Infra/LogInternal.cpp \
+		Infra/ctime.cpp \
+		Infra/thread.cpp \
+		Infra/link.cpp \
+		Infra/timer.cpp \
+		Infra/Log.cpp \
+		netFwk/NetServer.cpp \
+		netFwk/Session.cpp
 QMAKE_TARGET  = inputmethod
 DESTDIR       = 
 TARGET        = inputmethod
@@ -521,8 +539,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents inputmethod.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5.9.5-a7/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents chnpanel.h clicklabel.h im.h key.h keyboard.h infra/LogInternal.h infra/ctime.h infra/MsgQueue.h infra/thread.h infra/link.h infra/cfunc.h infra/def.h $(DISTDIR)/
-	$(COPY_FILE) --parents chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp infra/MsgQueue.cpp infra/ctime.cpp infra/thread.cpp infra/link.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents chnpanel.h clicklabel.h im.h key.h keyboard.h message.h Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h netFwk/NetServer.h netFwk/Session.h $(DISTDIR)/
+	$(COPY_FILE) --parents chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp message.cpp Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp netFwk/NetServer.cpp netFwk/Session.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -680,7 +698,7 @@ moc_chnpanel.cpp: clicklabel.h \
 		chnpanel.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include chnpanel.h -o moc_chnpanel.cpp
+	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include chnpanel.h -o moc_chnpanel.cpp
 
 moc_clicklabel.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QLabel \
 		/opt/qt5.9.5-a7/include/QtWidgets/qlabel.h \
@@ -787,7 +805,7 @@ moc_clicklabel.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QLabel \
 		clicklabel.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include clicklabel.h -o moc_clicklabel.cpp
+	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include clicklabel.h -o moc_clicklabel.cpp
 
 moc_im.cpp: keyboard.h \
 		key.h \
@@ -894,7 +912,9 @@ moc_im.cpp: keyboard.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -941,7 +961,7 @@ moc_im.cpp: keyboard.h \
 		im.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include im.h -o moc_im.cpp
+	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include im.h -o moc_im.cpp
 
 moc_key.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
@@ -1046,11 +1066,13 @@ moc_key.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		key.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include key.h -o moc_key.cpp
+	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include key.h -o moc_key.cpp
 
 moc_keyboard.cpp: key.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
@@ -1156,7 +1178,9 @@ moc_keyboard.cpp: key.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -1176,7 +1200,7 @@ moc_keyboard.cpp: key.h \
 		keyboard.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include keyboard.h -o moc_keyboard.cpp
+	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include keyboard.h -o moc_keyboard.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1527,7 +1551,9 @@ im.o: im.cpp im.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -1576,7 +1602,8 @@ im.o: im.cpp im.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qdialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o im.o im.cpp
 
-key.o: key.cpp key.h \
+key.o: key.cpp infra/ctime.h \
+		key.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgetsglobal.h \
@@ -1680,7 +1707,9 @@ key.o: key.cpp key.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o key.o key.cpp
 
 keyboard.o: keyboard.cpp keyboard.h \
@@ -1788,7 +1817,9 @@ keyboard.o: keyboard.cpp keyboard.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -2134,7 +2165,9 @@ main.o: main.cpp /opt/qt5.9.5-a7/include/QtGui/QtGui \
 		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qabstractbutton.h \
-		infra/MsgQueue.h \
+		infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -2148,23 +2181,69 @@ main.o: main.cpp /opt/qt5.9.5-a7/include/QtGui/QtGui \
 		/opt/qt5.9.5-a7/include/QtCore/QSignalMapper
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
-MsgQueue.o: infra/MsgQueue.cpp infra/MsgQueue.h \
-		infra/ctime.h \
-		infra/LogInternal.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o MsgQueue.o infra/MsgQueue.cpp
-
-ctime.o: infra/ctime.cpp infra/ctime.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctime.o infra/ctime.cpp
-
-thread.o: infra/thread.cpp infra/thread.h \
+message.o: message.cpp Infra/Log.h \
+		Infra/thread.h \
 		infra/cfunc.h \
 		infra/def.h \
-		infra/link.h \
-		infra/LogInternal.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o infra/thread.cpp
+		Infra/ctime.h \
+		netFwk/NetServer.h \
+		netFwk/Session.h \
+		Infra/timer.h \
+		message.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o message.o message.cpp
 
-link.o: infra/link.cpp infra/link.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o link.o infra/link.cpp
+LogInternal.o: Infra/LogInternal.cpp Infra/Log.h \
+		Infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o LogInternal.o Infra/LogInternal.cpp
+
+ctime.o: Infra/ctime.cpp Infra/ctime.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctime.o Infra/ctime.cpp
+
+thread.o: Infra/thread.cpp Infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
+		Infra/link.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o Infra/thread.cpp
+
+link.o: Infra/link.cpp Infra/link.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o link.o Infra/link.cpp
+
+timer.o: Infra/timer.cpp Infra/link.h \
+		Infra/ctime.h \
+		Infra/timer.h \
+		infra/cfunc.h \
+		infra/def.h \
+		Infra/thread.h \
+		Infra/LogInternal.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o timer.o Infra/timer.cpp
+
+Log.o: Infra/Log.cpp Infra/Log.h \
+		Infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Log.o Infra/Log.cpp
+
+NetServer.o: netFwk/NetServer.cpp netFwk/NetServer.h \
+		Infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
+		netFwk/Session.h \
+		Infra/timer.h \
+		Infra/Log.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o NetServer.o netFwk/NetServer.cpp
+
+Session.o: netFwk/Session.cpp netFwk/Session.h \
+		Infra/thread.h \
+		infra/cfunc.h \
+		infra/def.h \
+		Infra/timer.h \
+		Infra/ctime.h \
+		Infra/Log.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Session.o netFwk/Session.cpp
 
 qrc_inputmethod.o: qrc_inputmethod.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_inputmethod.o qrc_inputmethod.cpp

@@ -1,5 +1,6 @@
 #include "stdio.h"
 #include "message.h"
+#include <string>
 
 
 
@@ -12,7 +13,6 @@ void func(std::string str)
 int main(int argc, char const *argv[])
 {
 
-	CMessage::instance()->bind("all", CMessage::EventProc_t(func));
 	while (1);
 
 	

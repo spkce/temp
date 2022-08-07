@@ -2,7 +2,6 @@
 #define __TIME_H__
 
 #include <time.h>
-
 namespace Infra
 {
 
@@ -57,6 +56,9 @@ private:
 class CTime
 {
 public:
+	CTime();
+	CTime(CDate &t);
+	virtual ~CTime();
 	//获取当前unix时间戳, 单位:秒
 	static unsigned long long getRealTimeSecond();
 	//获取当前unix时间戳, 单位:毫秒
@@ -78,6 +80,7 @@ public:
 	static void covertRealTime(unsigned int ms, timespec *tp);
 
 	static void delay_ms(unsigned int ms);
+private:
 };
 
 }//Infra
