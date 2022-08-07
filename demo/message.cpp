@@ -100,6 +100,16 @@ bool CKeyboard::send(const char* buf, int len)
 	return len;
 }
 
+bool CKeyboard::attach(std::string event, const eventProc_t & func)
+{
+	if(m_mapProc.find(event) != m_mapProc.end())
+	{
+		return false;
+	}
+	m_mapProc[event] = func;
+	return true;
+}
+
 void CKeyboard::replyProc(void* arg)
 {
 	Infra::Error("NetTerminal","replyProc\n");
@@ -114,5 +124,22 @@ void CKeyboard::replyProc(void* arg)
 	}
 
 	std::string str = m_pRecvbuf;
-	printf("recv:%s\n", str.c_str());
+	Infra::Error("NetTerminal","find str:%s\n", str.c_str());
+	
+	auto it = m_mapProc.find(str);
+	if(it != m_mapProc.end())
+	{
+		Infra::Error("NetTerminal","find str:%s\n", str.c_str());
+		eventProc_t func = it->second;
+		func(str);
+		return ;
+	}
+
+	it = m_mapProc.find("all");
+	if(it != m_mapProc.end())
+	{
+		eventProc_t func = it->second;
+		func(str);
+		return ;
+	}
 }

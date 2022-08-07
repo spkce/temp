@@ -8,8 +8,8 @@ DEPENDPATH += .
 INCLUDEPATH += .
 
 # Input
-HEADERS += chnpanel.h clicklabel.h im.h key.h keyboard.h message.h
-SOURCES += chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp message.cpp
+HEADERS += chnpanel.h clicklabel.h key.h keyboard.h message.h
+SOURCES += chnpanel.cpp clicklabel.cpp key.cpp keyboard.cpp main.cpp message.cpp
 
 INCLUDEPATH += Infra
 INCLUDEPATH += netFwk

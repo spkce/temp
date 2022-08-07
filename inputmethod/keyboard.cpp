@@ -87,20 +87,16 @@ Keyboard::Keyboard()
     connect(keyShift, SIGNAL(clicked()), this, SLOT(setShift()));
     connect(keyChaNum, SIGNAL(clicked()), this, SLOT(setChaNum()));
     //connect(keyEngChn, SIGNAL(clicked()), this, SLOT(setEngChn()));
-    //connect(keyComma, SIGNAL(clicked()), mapper, SLOT(map()));
-    //connect(keyPeriod, SIGNAL(clicked()), mapper, SLOT(map()));
-    //connect(keyDelete, SIGNAL(clicked()), mapper, SLOT(map()));
-    //connect(keySpace, SIGNAL(clicked()), mapper, SLOT(map()));
-    //connect(keyGo, SIGNAL(clicked()), mapper, SLOT(map()));
-//
+    connect(keyComma, SIGNAL(clicked()), keyComma, SLOT(onclick()));
+    connect(keyPeriod, SIGNAL(clicked()), keyDelete, SLOT(onclick()));
+    connect(keyDelete, SIGNAL(clicked()), keyDelete,  SLOT(onclick()));
+    connect(keySpace, SIGNAL(clicked()), keySpace, SLOT(onclick()));
+    connect(keyGo, SIGNAL(clicked()), keyGo, SLOT(onclick()));
+
     //connect(chnPanel->chnLineEdit, SIGNAL(textChanged(QString)), this, SLOT(transPy(QString)));
     //connect(chnPanel->btnLeft, SIGNAL(clicked()), this, SLOT(turnLeft()));
     //connect(chnPanel->btnRight, SIGNAL(clicked()), this, SLOT(turnRight()));
-//
-    //for (i = 0; i < 5; i++)
-	//{
-	//	connect(chnPanel->chnLabel[i], SIGNAL(clicked()), mapper, SLOT(map()));
-	//}
+
         
 	CKBMessage::instance()->init();
 }

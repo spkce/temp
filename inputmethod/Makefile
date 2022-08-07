@@ -53,7 +53,6 @@ OBJECTS_DIR   = ./
 
 SOURCES       = chnpanel.cpp \
 		clicklabel.cpp \
-		im.cpp \
 		key.cpp \
 		keyboard.cpp \
 		main.cpp \
@@ -68,12 +67,10 @@ SOURCES       = chnpanel.cpp \
 		netFwk/Session.cpp qrc_inputmethod.cpp \
 		moc_chnpanel.cpp \
 		moc_clicklabel.cpp \
-		moc_im.cpp \
 		moc_key.cpp \
 		moc_keyboard.cpp
 OBJECTS       = chnpanel.o \
 		clicklabel.o \
-		im.o \
 		key.o \
 		keyboard.o \
 		main.o \
@@ -89,7 +86,6 @@ OBJECTS       = chnpanel.o \
 		qrc_inputmethod.o \
 		moc_chnpanel.o \
 		moc_clicklabel.o \
-		moc_im.o \
 		moc_key.o \
 		moc_keyboard.o
 DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
@@ -220,7 +216,6 @@ DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
 		/opt/qt5.9.5-a7/mkspecs/features/lex.prf \
 		inputmethod.pro chnpanel.h \
 		clicklabel.h \
-		im.h \
 		key.h \
 		keyboard.h \
 		message.h \
@@ -234,7 +229,6 @@ DIST          = /opt/qt5.9.5-a7/mkspecs/features/spec_pre.prf \
 		netFwk/NetServer.h \
 		netFwk/Session.h chnpanel.cpp \
 		clicklabel.cpp \
-		im.cpp \
 		key.cpp \
 		keyboard.cpp \
 		main.cpp \
@@ -539,8 +533,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents inputmethod.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5.9.5-a7/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents chnpanel.h clicklabel.h im.h key.h keyboard.h message.h Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h netFwk/NetServer.h netFwk/Session.h $(DISTDIR)/
-	$(COPY_FILE) --parents chnpanel.cpp clicklabel.cpp im.cpp key.cpp keyboard.cpp main.cpp message.cpp Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp netFwk/NetServer.cpp netFwk/Session.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents chnpanel.h clicklabel.h key.h keyboard.h message.h Infra/LogInternal.h Infra/ctime.h Infra/thread.h Infra/link.h Infra/cfunc.h Infra/def.h Infra/timer.h netFwk/NetServer.h netFwk/Session.h $(DISTDIR)/
+	$(COPY_FILE) --parents chnpanel.cpp clicklabel.cpp key.cpp keyboard.cpp main.cpp message.cpp Infra/LogInternal.cpp Infra/ctime.cpp Infra/thread.cpp Infra/link.cpp Infra/timer.cpp Infra/Log.cpp netFwk/NetServer.cpp netFwk/Session.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -578,9 +572,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/qt5.9.5-a7/mkspecs/features/data/dummy.cpp
 	/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/bin/arm-linux-gnueabihf-g++ -pipe -O2 -O2 -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h /opt/qt5.9.5-a7/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_chnpanel.cpp moc_clicklabel.cpp moc_im.cpp moc_key.cpp moc_keyboard.cpp
+compiler_moc_header_make_all: moc_chnpanel.cpp moc_clicklabel.cpp moc_key.cpp moc_keyboard.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_chnpanel.cpp moc_clicklabel.cpp moc_im.cpp moc_key.cpp moc_keyboard.cpp
+	-$(DEL_FILE) moc_chnpanel.cpp moc_clicklabel.cpp moc_key.cpp moc_keyboard.cpp
 moc_chnpanel.cpp: clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
 		/opt/qt5.9.5-a7/include/QtWidgets/qlabel.h \
@@ -807,162 +801,6 @@ moc_clicklabel.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QLabel \
 		/opt/qt5.9.5-a7/bin/moc
 	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include clicklabel.h -o moc_clicklabel.cpp
 
-moc_im.cpp: keyboard.h \
-		key.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgetsglobal.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtguiglobal.h \
-		/opt/qt5.9.5-a7/include/QtCore/qglobal.h \
-		/opt/qt5.9.5-a7/include/QtCore/qconfig-bootstrapped.h \
-		/opt/qt5.9.5-a7/include/QtCore/qconfig.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtcore-config.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsystemdetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qprocessordetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcompilerdetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtypeinfo.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsysinfo.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlogging.h \
-		/opt/qt5.9.5-a7/include/QtCore/qflags.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbasicatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_bootstrap.h \
-		/opt/qt5.9.5-a7/include/QtCore/qgenericatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_cxx11.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_msvc.h \
-		/opt/qt5.9.5-a7/include/QtCore/qglobalstatic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmutex.h \
-		/opt/qt5.9.5-a7/include/QtCore/qnumeric.h \
-		/opt/qt5.9.5-a7/include/QtCore/qversiontagging.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtgui-config.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgets-config.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractbutton.h \
-		/opt/qt5.9.5-a7/include/QtGui/qicon.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsize.h \
-		/opt/qt5.9.5-a7/include/QtCore/qnamespace.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qalgorithms.h \
-		/opt/qt5.9.5-a7/include/QtCore/qiterator.h \
-		/opt/qt5.9.5-a7/include/QtCore/qrefcount.h \
-		/opt/qt5.9.5-a7/include/QtCore/qarraydata.h \
-		/opt/qt5.9.5-a7/include/QtCore/qhashfunctions.h \
-		/opt/qt5.9.5-a7/include/QtCore/qchar.h \
-		/opt/qt5.9.5-a7/include/QtCore/qpair.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbytearraylist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbytearray.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstring.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringbuilder.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringlist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qregexp.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringmatcher.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpixmap.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpaintdevice.h \
-		/opt/qt5.9.5-a7/include/QtGui/qwindowdefs.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobjectdefs.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobjectdefs_impl.h \
-		/opt/qt5.9.5-a7/include/QtGui/qwindowdefs_win.h \
-		/opt/qt5.9.5-a7/include/QtCore/qrect.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmargins.h \
-		/opt/qt5.9.5-a7/include/QtCore/qpoint.h \
-		/opt/qt5.9.5-a7/include/QtGui/qcolor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qrgb.h \
-		/opt/qt5.9.5-a7/include/QtGui/qrgba64.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsharedpointer.h \
-		/opt/qt5.9.5-a7/include/QtCore/qshareddata.h \
-		/opt/qt5.9.5-a7/include/QtCore/qhash.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsharedpointer_impl.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobject.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcoreevent.h \
-		/opt/qt5.9.5-a7/include/QtCore/qscopedpointer.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmetatype.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvarlengtharray.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcontainerfwd.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobject_impl.h \
-		/opt/qt5.9.5-a7/include/QtGui/qimage.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpixelformat.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtransform.h \
-		/opt/qt5.9.5-a7/include/QtGui/qmatrix.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpolygon.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvector.h \
-		/opt/qt5.9.5-a7/include/QtGui/qregion.h \
-		/opt/qt5.9.5-a7/include/QtCore/qdatastream.h \
-		/opt/qt5.9.5-a7/include/QtCore/qiodevice.h \
-		/opt/qt5.9.5-a7/include/QtCore/qline.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpainterpath.h \
-		/opt/qt5.9.5-a7/include/QtGui/qkeysequence.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qwidget.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpalette.h \
-		/opt/qt5.9.5-a7/include/QtGui/qbrush.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfont.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfontmetrics.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfontinfo.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qsizepolicy.h \
-		/opt/qt5.9.5-a7/include/QtGui/qcursor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qevent.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvariant.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmap.h \
-		/opt/qt5.9.5-a7/include/QtCore/qdebug.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtextstream.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlocale.h \
-		/opt/qt5.9.5-a7/include/QtCore/qset.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcontiguouscache.h \
-		/opt/qt5.9.5-a7/include/QtCore/qurl.h \
-		/opt/qt5.9.5-a7/include/QtCore/qurlquery.h \
-		/opt/qt5.9.5-a7/include/QtCore/qfile.h \
-		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
-		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
-		chnpanel.h \
-		clicklabel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
-		/opt/qt5.9.5-a7/include/QtWidgets/qlabel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qframe.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QWidget \
-		/opt/qt5.9.5-a7/include/QtWidgets/QLineEdit \
-		/opt/qt5.9.5-a7/include/QtWidgets/qlineedit.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextcursor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextformat.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpen.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextoption.h \
-		/opt/qt5.9.5-a7/include/QtGui/QMouseEvent \
-		/opt/qt5.9.5-a7/include/QtCore/QPoint \
-		/opt/qt5.9.5-a7/include/QtCore/QSignalMapper \
-		/opt/qt5.9.5-a7/include/QtCore/qsignalmapper.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlDatabase \
-		/opt/qt5.9.5-a7/include/QtSql/qsqldatabase.h \
-		/opt/qt5.9.5-a7/include/QtSql/qtsqlglobal.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlQuery \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlquery.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlTableModel \
-		/opt/qt5.9.5-a7/include/QtSql/qsqltablemodel.h \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlquerymodel.h \
-		/opt/qt5.9.5-a7/include/QtCore/qabstractitemmodel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QTableView \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtableview.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractitemview.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractscrollarea.h \
-		/opt/qt5.9.5-a7/include/QtCore/qitemselectionmodel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qstyleoption.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractspinbox.h \
-		/opt/qt5.9.5-a7/include/QtGui/qvalidator.h \
-		/opt/qt5.9.5-a7/include/QtCore/qregularexpression.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qslider.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractslider.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qstyle.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtabbar.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtabwidget.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qrubberband.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlRecord \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlrecord.h \
-		im.h \
-		moc_predefs.h \
-		/opt/qt5.9.5-a7/bin/moc
-	/opt/qt5.9.5-a7/bin/moc $(DEFINES) --include ./moc_predefs.h -I/opt/qt5.9.5-a7/mkspecs/linux-arm-gnueabi-g++ -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod -I/mnt/hgfs/share/_temp/inputmethod/Infra -I/mnt/hgfs/share/_temp/inputmethod/netFwk -I/opt/qt5.9.5-a7/include -I/opt/qt5.9.5-a7/include/QtWidgets -I/opt/qt5.9.5-a7/include/QtGui -I/opt/qt5.9.5-a7/include/QtSql -I/opt/qt5.9.5-a7/include/QtCore -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2 -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/arm-linux-gnueabihf -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include/c++/4.9.2/backward -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/lib/gcc/arm-linux-gnueabihf/4.9.2/include-fixed -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/include -I/opt/gcc-linaro-arm-linux-gnueabihf-4.9-2014.09_linux/arm-linux-gnueabihf/libc/usr/include im.h -o moc_im.cpp
-
 moc_key.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgetsglobal.h \
@@ -1066,9 +904,9 @@ moc_key.cpp: /opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		key.h \
 		moc_predefs.h \
 		/opt/qt5.9.5-a7/bin/moc
@@ -1178,9 +1016,9 @@ moc_keyboard.cpp: key.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -1445,8 +1283,11 @@ clicklabel.o: clicklabel.cpp clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtGui/QMouseEvent
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o clicklabel.o clicklabel.cpp
 
-im.o: im.cpp im.h \
-		keyboard.h \
+key.o: key.cpp Infra/ctime.h \
+		message.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		key.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
@@ -1550,166 +1391,7 @@ im.o: im.cpp im.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfile.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
-		chnpanel.h \
-		clicklabel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
-		/opt/qt5.9.5-a7/include/QtWidgets/qlabel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qframe.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QWidget \
-		/opt/qt5.9.5-a7/include/QtWidgets/QLineEdit \
-		/opt/qt5.9.5-a7/include/QtWidgets/qlineedit.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextcursor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextformat.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpen.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtextoption.h \
-		/opt/qt5.9.5-a7/include/QtGui/QMouseEvent \
-		/opt/qt5.9.5-a7/include/QtCore/QPoint \
-		/opt/qt5.9.5-a7/include/QtCore/QSignalMapper \
-		/opt/qt5.9.5-a7/include/QtCore/qsignalmapper.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlDatabase \
-		/opt/qt5.9.5-a7/include/QtSql/qsqldatabase.h \
-		/opt/qt5.9.5-a7/include/QtSql/qtsqlglobal.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlQuery \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlquery.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlTableModel \
-		/opt/qt5.9.5-a7/include/QtSql/qsqltablemodel.h \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlquerymodel.h \
-		/opt/qt5.9.5-a7/include/QtCore/qabstractitemmodel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QTableView \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtableview.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractitemview.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractscrollarea.h \
-		/opt/qt5.9.5-a7/include/QtCore/qitemselectionmodel.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qstyleoption.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractspinbox.h \
-		/opt/qt5.9.5-a7/include/QtGui/qvalidator.h \
-		/opt/qt5.9.5-a7/include/QtCore/qregularexpression.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qslider.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractslider.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qstyle.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtabbar.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtabwidget.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qrubberband.h \
-		/opt/qt5.9.5-a7/include/QtSql/QSqlRecord \
-		/opt/qt5.9.5-a7/include/QtSql/qsqlrecord.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QMessageBox \
-		/opt/qt5.9.5-a7/include/QtWidgets/qmessagebox.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qdialog.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o im.o im.cpp
-
-key.o: key.cpp infra/ctime.h \
-		key.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgetsglobal.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtguiglobal.h \
-		/opt/qt5.9.5-a7/include/QtCore/qglobal.h \
-		/opt/qt5.9.5-a7/include/QtCore/qconfig-bootstrapped.h \
-		/opt/qt5.9.5-a7/include/QtCore/qconfig.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtcore-config.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsystemdetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qprocessordetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcompilerdetection.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtypeinfo.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsysinfo.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlogging.h \
-		/opt/qt5.9.5-a7/include/QtCore/qflags.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbasicatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_bootstrap.h \
-		/opt/qt5.9.5-a7/include/QtCore/qgenericatomic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_cxx11.h \
-		/opt/qt5.9.5-a7/include/QtCore/qatomic_msvc.h \
-		/opt/qt5.9.5-a7/include/QtCore/qglobalstatic.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmutex.h \
-		/opt/qt5.9.5-a7/include/QtCore/qnumeric.h \
-		/opt/qt5.9.5-a7/include/QtCore/qversiontagging.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtgui-config.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qtwidgets-config.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qabstractbutton.h \
-		/opt/qt5.9.5-a7/include/QtGui/qicon.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsize.h \
-		/opt/qt5.9.5-a7/include/QtCore/qnamespace.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qalgorithms.h \
-		/opt/qt5.9.5-a7/include/QtCore/qiterator.h \
-		/opt/qt5.9.5-a7/include/QtCore/qrefcount.h \
-		/opt/qt5.9.5-a7/include/QtCore/qarraydata.h \
-		/opt/qt5.9.5-a7/include/QtCore/qhashfunctions.h \
-		/opt/qt5.9.5-a7/include/QtCore/qchar.h \
-		/opt/qt5.9.5-a7/include/QtCore/qpair.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbytearraylist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qbytearray.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstring.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringbuilder.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringlist.h \
-		/opt/qt5.9.5-a7/include/QtCore/qregexp.h \
-		/opt/qt5.9.5-a7/include/QtCore/qstringmatcher.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpixmap.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpaintdevice.h \
-		/opt/qt5.9.5-a7/include/QtGui/qwindowdefs.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobjectdefs.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobjectdefs_impl.h \
-		/opt/qt5.9.5-a7/include/QtGui/qwindowdefs_win.h \
-		/opt/qt5.9.5-a7/include/QtCore/qrect.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmargins.h \
-		/opt/qt5.9.5-a7/include/QtCore/qpoint.h \
-		/opt/qt5.9.5-a7/include/QtGui/qcolor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qrgb.h \
-		/opt/qt5.9.5-a7/include/QtGui/qrgba64.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsharedpointer.h \
-		/opt/qt5.9.5-a7/include/QtCore/qshareddata.h \
-		/opt/qt5.9.5-a7/include/QtCore/qhash.h \
-		/opt/qt5.9.5-a7/include/QtCore/qsharedpointer_impl.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobject.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcoreevent.h \
-		/opt/qt5.9.5-a7/include/QtCore/qscopedpointer.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmetatype.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvarlengtharray.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcontainerfwd.h \
-		/opt/qt5.9.5-a7/include/QtCore/qobject_impl.h \
-		/opt/qt5.9.5-a7/include/QtGui/qimage.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpixelformat.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtransform.h \
-		/opt/qt5.9.5-a7/include/QtGui/qmatrix.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpolygon.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvector.h \
-		/opt/qt5.9.5-a7/include/QtGui/qregion.h \
-		/opt/qt5.9.5-a7/include/QtCore/qdatastream.h \
-		/opt/qt5.9.5-a7/include/QtCore/qiodevice.h \
-		/opt/qt5.9.5-a7/include/QtCore/qline.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpainterpath.h \
-		/opt/qt5.9.5-a7/include/QtGui/qkeysequence.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qwidget.h \
-		/opt/qt5.9.5-a7/include/QtGui/qpalette.h \
-		/opt/qt5.9.5-a7/include/QtGui/qbrush.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfont.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfontmetrics.h \
-		/opt/qt5.9.5-a7/include/QtGui/qfontinfo.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qsizepolicy.h \
-		/opt/qt5.9.5-a7/include/QtGui/qcursor.h \
-		/opt/qt5.9.5-a7/include/QtGui/qevent.h \
-		/opt/qt5.9.5-a7/include/QtCore/qvariant.h \
-		/opt/qt5.9.5-a7/include/QtCore/qmap.h \
-		/opt/qt5.9.5-a7/include/QtCore/qdebug.h \
-		/opt/qt5.9.5-a7/include/QtCore/qtextstream.h \
-		/opt/qt5.9.5-a7/include/QtCore/qlocale.h \
-		/opt/qt5.9.5-a7/include/QtCore/qset.h \
-		/opt/qt5.9.5-a7/include/QtCore/qcontiguouscache.h \
-		/opt/qt5.9.5-a7/include/QtCore/qurl.h \
-		/opt/qt5.9.5-a7/include/QtCore/qurlquery.h \
-		/opt/qt5.9.5-a7/include/QtCore/qfile.h \
-		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
-		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
-		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h
+		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o key.o key.cpp
 
 keyboard.o: keyboard.cpp keyboard.h \
@@ -1817,9 +1499,9 @@ keyboard.o: keyboard.cpp keyboard.h \
 		/opt/qt5.9.5-a7/include/QtCore/qfiledevice.h \
 		/opt/qt5.9.5-a7/include/QtGui/qvector2d.h \
 		/opt/qt5.9.5-a7/include/QtGui/qtouchdevice.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -1840,7 +1522,8 @@ keyboard.o: keyboard.cpp keyboard.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qboxlayout.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qlayout.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qlayoutitem.h \
-		/opt/qt5.9.5-a7/include/QtWidgets/qgridlayout.h
+		/opt/qt5.9.5-a7/include/QtWidgets/qgridlayout.h \
+		message.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o keyboard.o keyboard.cpp
 
 main.o: main.cpp /opt/qt5.9.5-a7/include/QtGui/QtGui \
@@ -2165,9 +1848,9 @@ main.o: main.cpp /opt/qt5.9.5-a7/include/QtGui/QtGui \
 		/opt/qt5.9.5-a7/include/QtWidgets/QToolButton \
 		/opt/qt5.9.5-a7/include/QtWidgets/qtoolbutton.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/qabstractbutton.h \
-		infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/thread.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		chnpanel.h \
 		clicklabel.h \
 		/opt/qt5.9.5-a7/include/QtWidgets/QLabel \
@@ -2183,8 +1866,8 @@ main.o: main.cpp /opt/qt5.9.5-a7/include/QtGui/QtGui \
 
 message.o: message.cpp Infra/Log.h \
 		Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		Infra/ctime.h \
 		netFwk/NetServer.h \
 		netFwk/Session.h \
@@ -2194,8 +1877,8 @@ message.o: message.cpp Infra/Log.h \
 
 LogInternal.o: Infra/LogInternal.cpp Infra/Log.h \
 		Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		Infra/LogInternal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o LogInternal.o Infra/LogInternal.cpp
 
@@ -2203,8 +1886,8 @@ ctime.o: Infra/ctime.cpp Infra/ctime.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ctime.o Infra/ctime.cpp
 
 thread.o: Infra/thread.cpp Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		Infra/link.h \
 		Infra/LogInternal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o thread.o Infra/thread.cpp
@@ -2215,22 +1898,22 @@ link.o: Infra/link.cpp Infra/link.h
 timer.o: Infra/timer.cpp Infra/link.h \
 		Infra/ctime.h \
 		Infra/timer.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		Infra/thread.h \
 		Infra/LogInternal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o timer.o Infra/timer.cpp
 
 Log.o: Infra/Log.cpp Infra/Log.h \
 		Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h
+		Infra/cfunc.h \
+		Infra/def.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Log.o Infra/Log.cpp
 
 NetServer.o: netFwk/NetServer.cpp netFwk/NetServer.h \
 		Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		netFwk/Session.h \
 		Infra/timer.h \
 		Infra/Log.h
@@ -2238,8 +1921,8 @@ NetServer.o: netFwk/NetServer.cpp netFwk/NetServer.h \
 
 Session.o: netFwk/Session.cpp netFwk/Session.h \
 		Infra/thread.h \
-		infra/cfunc.h \
-		infra/def.h \
+		Infra/cfunc.h \
+		Infra/def.h \
 		Infra/timer.h \
 		Infra/ctime.h \
 		Infra/Log.h
@@ -2253,9 +1936,6 @@ moc_chnpanel.o: moc_chnpanel.cpp
 
 moc_clicklabel.o: moc_clicklabel.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_clicklabel.o moc_clicklabel.cpp
-
-moc_im.o: moc_im.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_im.o moc_im.cpp
 
 moc_key.o: moc_key.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_key.o moc_key.cpp
