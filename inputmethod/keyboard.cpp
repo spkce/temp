@@ -4,6 +4,9 @@
 
 Keyboard::Keyboard()
 :QWidget(0,Qt::FramelessWindowHint | Qt::Tool | Qt::WindowStaysOnTopHint)
+,m_shift(false)
+,m_chaNum(false)
+,m_chn(false)
 {
     chnPanel = new ChnPanel();
     chnPanel->setParent(this);
@@ -75,13 +78,14 @@ Keyboard::Keyboard()
 
     setGeometry(40, 100, 240, 140);
     setObjectName(QString::fromUtf8("KEYBOARD"));
-	//for (i = 0; i < 26; i++)
-	//{
-	//	connect(key[i], SIGNAL(clicked()), key[i], SLOT(onclick()));
-	//}
 
-    //connect(keyShift, SIGNAL(clicked()), mapper, SLOT(map()));
-    //connect(keyChaNum, SIGNAL(clicked()), this, SLOT(setChaNum()));
+	for (i = 0; i < 26; i++)
+	{
+		connect(key[i], SIGNAL(clicked()), key[i], SLOT(onclick()));
+	}
+
+    connect(keyShift, SIGNAL(clicked()), this, SLOT(setShift()));
+    connect(keyChaNum, SIGNAL(clicked()), this, SLOT(setChaNum()));
     //connect(keyEngChn, SIGNAL(clicked()), this, SLOT(setEngChn()));
     //connect(keyComma, SIGNAL(clicked()), mapper, SLOT(map()));
     //connect(keyPeriod, SIGNAL(clicked()), mapper, SLOT(map()));
@@ -110,7 +114,7 @@ void Keyboard::mousePressEvent(QMouseEvent *ev)
     isMoving = true;
     lastPnt = ev->pos() + pos();
 }
-/********此处参考娟姐给的T9输入法。实现移动***********************/
+
 void Keyboard::mouseReleaseEvent(QMouseEvent *ev)
 {
   
@@ -133,4 +137,62 @@ void Keyboard::mouseMoveEvent(QMouseEvent *ev)
     }
 }
 
+void Keyboard::setShift()
+{
+	m_shift = !m_shift;
+	if (m_shift)
+	{
+		for (int i = 0; i < 26; i++)
+		{
+			key[i]->setText(englishCaps[i]);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 26; i++) 
+		{
+			key[i]->setText(english[i]);
+		}
+	}
+}
+
+void Keyboard::setChaNum()
+{
+	m_shift = false;
+	m_chaNum = !m_chaNum;
+
+	if (m_chaNum)
+	{
+		keyChaNum->setText(tr("abc"));
+		keyShift->setText(tr("@"));
+		disconnect(keyShift, SIGNAL(clicked()), this, SLOT(setShift()));
+		connect(keyShift, SIGNAL(clicked()), keyShift, SLOT(onclick()));
+		chnPanel->chnLineEdit->setText("");
+
+		//setGeometry(0, 180, 240, 140);
+		chnPanel->setVisible(false);
+		//keyBoard->setGeometry(0, 0, 240, 140);
+		for (int i = 0; i < 26; i++)
+		{
+			key[i]->setText(number[i]);
+		}
+	}
+	else
+	{
+		keyChaNum->setText(tr(".?123"));
+		
+		
+		//setGeometry(0, 180, 240, 140);
+		chnPanel->setVisible(false);
+		//keyBoard->setGeometry(0, 0, 240, 140);
+
+		keyShift->setText(tr("SFT"));
+		disconnect(keyShift, SIGNAL(clicked()), keyShift, SLOT(onclick()));
+		connect(keyShift, SIGNAL(clicked()), this, SLOT(setShift()));
+		for (int i = 0; i < 26; i++)
+		{
+			key[i]->setText(english[i]);
+		}
+	}
+}
 

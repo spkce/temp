@@ -19,7 +19,7 @@ IMFrame::IMFrame()
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("./data.db");
     if (!db.open())
-        QMessageBox::information(0, tr("中文字库date.db无法打开"), tr("请查看相应文件的路经"));
+        QMessageBox::information(0, tr("�?文字库date.db无法打开"), tr("请查看相应文件的�?�?"));
 
     model = new QSqlTableModel();
     model->setTable("pingyin");
@@ -278,7 +278,7 @@ void IMFrame::listChn()
         mapper->setMapping(kb->chnPanel->chnLabel[i], kb->chnPanel->chnLabel[i]->text());
     }
 }
-/*********实现隐藏和显示键盘，这是和其他程序的一个接口**********/
+/*********实现隐藏和显示键盘，这是和其他程序的一�?接口**********/
 void IMFrame::handleMessageFromQCop(const QString &message, const QByteArray &data)
 {
     if (message == "show") {

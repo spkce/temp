@@ -9,7 +9,6 @@ Key::Key(QString name, int w, int h)
     setFont(QFont("helvetica", 6, QFont::Bold));
     setObjectName(QString::fromUtf8("KEYBOARD"));
 
-	connect(this, SIGNAL(clicked()), this, SLOT(onclick()));
 }
 
 Key::~Key()
