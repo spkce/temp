@@ -30,6 +30,8 @@ int main(int argc, char const *argv[])
 	Infra::CTime::delay_ms(1000);
 	std::string str = "keyborad";
 	CKeyboard::instance()->send(str.c_str(), str.length());
+	str = "SHOW";
+	CKeyboard::instance()->send(str.c_str(), str.length());
 	while (1);
 
 

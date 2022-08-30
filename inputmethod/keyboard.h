@@ -41,6 +41,9 @@ public:
 	bool m_shift;
 	bool m_chaNum;
 	bool m_chn;
+private:
+    void eventProc(std::string evet);
+
 protected:
     void mousePressEvent(QMouseEvent *ev);
     void mouseMoveEvent(QMouseEvent *ev);

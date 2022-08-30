@@ -99,11 +99,14 @@ Keyboard::Keyboard()
 
         
 	CKBMessage::instance()->init();
+    CKBMessage::instance()->attach("HIDE", Infra::ThreadProc_t(&Keyboard::eventProc, this));
+    CKBMessage::instance()->attach("SHOW", Infra::ThreadProc_t(&Keyboard::eventProc, this));
 }
 
 Keyboard::~Keyboard()
 {
 }
+
 void Keyboard::mousePressEvent(QMouseEvent *ev)
 {
  
@@ -192,3 +195,14 @@ void Keyboard::setChaNum()
 	}
 }
 
+void Keyboard::eventProc(std::string evet)
+{
+    if (event == "HIDE")
+    {
+        setVisible(false);
+    }
+    else if (event == "SHOW")
+    {
+        setVisible(true);
+    }
+}
