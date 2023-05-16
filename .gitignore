@@ -2,3 +2,6 @@
 inputmethod/moc_*.cpp
 inputmethod/moc_*.h
 inputmethod/inputmethod
+vcp/.vscode/c_cpp_properties.json
+vcp/.vscode/settings.json
+*.pyc
