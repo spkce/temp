@@ -23,26 +23,32 @@ int CVcpParser::input(const unsigned char* buf, unsigned int len)
 				buf += len;
 			}
 
+			if (m_buffer.size() < sizeof(struct stVcpHeader))
+			{
+				return 0;
+			}
 			unsigned int length = 0;
 			unsigned short csum = 0;
 			const unsigned int size = m_buffer.size();
-			for (unsigned int i = 0; i < size; i++)
+			const unsigned char* p = m_buffer.getBuffer();
+
+			unsigned int i = 0;
+			for (; i < size; i++)
 			{
-				const unsigned char* p = m_buffer.getBuffer();
 				if (parserHeader(p + i, size - i, length, csum))
 				{
-					m_buffer.remove(-i);
-					if (length - (size - i) > len)
+					if (length > size - i)
 					{
-						m_buffer.append(buf, len);
-						return length - (size - i) - len;
+						m_buffer.remove(-i);
+						return length - (size - i);
 					}
-
-					parser(m_buffer.getBuffer(), length, csum);
+					
+					parser(p + i, length, csum);
 					m_buffer.remove(-length);
 					break;
 				}
 			}
+			m_buffer.remove(-i); // remove other byte front of header
 		}
 		else
 		{
@@ -185,38 +191,9 @@ int CVSpaceCmd::parse(const unsigned char* buf, int len)
 	{
 		return length;
 	}
-	/*
-	const struct stVcpHeader * pVcpHdr = (const struct stVcpHeader *)buf;
-	if (pVcpHdr->ident != htonl(0x7E766370))
-	{
-		Infra::Error("CmdServer", "Wrong identifier:%d\n", ntohl(pVcpHdr->ident));
-		return 0;
-	}
 
-	const char * payload = buf + sizeof(struct stVcpHeader);
-	unsigned short fsc = checkSum((const unsigned char*)payload , len - sizeof(struct stVcpHeader));
-	unsigned short csum = ntohs(pVcpHdr->fsc);
-	
-	if (csum != fsc)
-	{
-		Infra::Error("CmdServer", "Wrong FSC:%d %d\n", csum, fsc);
-		return 0;
-	}
-
-	std::string recv = payload;
-	Json::String errs;
-	Json::Value request;
-	Json::CharReaderBuilder readerBuilder;
-	std::unique_ptr<Json::CharReader> const jsonReader(readerBuilder.newCharReader());
-	bool res = jsonReader->parse(recv.c_str(), recv.c_str() + recv.length(), &request, &errs);
-	if (!res || !errs.empty())
-	{
-		Infra::Error("CmdServer", "json parse err:%s\n", errs.c_str());
-		return 0;
-	}
-	*/
 	Json::Value request = Json::nullValue;
-	while (m_parser.output(request) > 0)
+	while (m_parser.output(request) >= 0)
 	{
 		Infra::Info("CmdServer","request = %s\n", request.toStyledString().c_str());
 		Json::Value response = Json::nullValue;

@@ -13,7 +13,7 @@ public:
 };
 
 CVcpTerminal::CVcpTerminal()
-:NetFwk::ITerminal(5, 2048)
+:NetFwk::ITerminal(5, 153)
 {
 }
 
