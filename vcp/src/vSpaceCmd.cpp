@@ -2,6 +2,14 @@
 #include "Log.h"
 #include "vSpaceCmd.h"
 
+struct stVcpHeader
+{
+	unsigned int ident;
+	unsigned short reserve;
+	unsigned short fsc;
+	unsigned int length;
+};
+
 CVcpParser::CVcpParser()
 {
 }

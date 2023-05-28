@@ -7,14 +7,6 @@
 class CVcpParser
 {
 public:
-	struct stVcpHeader
-	{
-		unsigned int ident;
-		unsigned short reserve;
-		unsigned short fsc;
-		unsigned int length;
-	};
-public:
 	CVcpParser();
 	virtual ~CVcpParser();
 
@@ -68,16 +60,6 @@ class CVSpaceCmd : public NetFwk::IProtocol
 		MSGID_SUBSCRIBE = 301,
 		MSGID_PUSH_NOTIFICATION = 302,
 	};
-
-
-	struct stVcpHeader
-	{
-		unsigned int ident;
-		unsigned short reserve;
-		unsigned short fsc;
-		unsigned int length;
-	};
-
 
 public:
 	CVSpaceCmd(NetFwk::ISession* session, size_t recvlen);
